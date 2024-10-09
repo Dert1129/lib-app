@@ -1,0 +1,92 @@
+version: "3.5"
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ENV_MYSQL_PASSWORD}
+    volumes:
+      - mariadbdata:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      local:
+        aliases:
+          - mariadb
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    environment:
+      TZ: "America/Detroit"
+    ports:
+      - 9090:8080 
+    networks:
+      local:
+        aliases:
+          - adminer
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: always
+    volumes:
+      - ${ENV_REACT_APP}/build:/usr/share/nginx/html
+    environment: 
+      TZ: "America/Detroit"
+    ports:
+      - 80:80
+    networks:
+      local:
+        aliases:
+        - nginx
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  lib-spring:
+    container_name: lib-spring
+    image: ${ENV_LIB_CONTAINER} 
+    depends_on: 
+      - mariadb
+    ports:
+      - "3030:3030"
+    environment:
+      SPRING_BOOT_ENVIRONMENT: ${ENV_DOCKER_ENVIRONMENT}
+      MYSQL_HOST: ${ENV_MYSQL_HOST}
+      MYSQL_USER: ${ENV_MYSQL_USER}
+      MYSQL_PASSWORD: ${ENV_MYSQL_PASSWORD}
+      TZ: "America/Detroit"
+    privileged: true
+    networks:
+      local:
+        aliases:
+          - lib-spring          
+
+
+
+volumes:
+  mariadbdata:
+
+networks:
+  local:
+    name: library
+    ipam:
+      driver: default
+      config:
+        - 
+          subnet: 10.12.0.0/16
