@@ -19,25 +19,31 @@ public class BookService {
     }
 
     public void addBook(String isbn) {
+
         final String uri = "https://openlibrary.org/isbn/" + isbn + ".json";
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(uri, String.class);
-        JSONObject jsonObj = new JSONObject(result);
-        String title = jsonObj.getString("title");
-        JSONArray authorArray = jsonObj.getJSONArray("authors");
-        JSONObject authorObj = authorArray.getJSONObject(0);
-        String authorEndpoint = authorObj.getString("key");
-        final String authorAPI = "https://openlibrary.org" + authorEndpoint + ".json";
-        String authorResult = restTemplate.getForObject(authorAPI, String.class);
-        JSONObject authObject = new JSONObject(authorResult);
-        String authorName = authObject.getString("name");
 
-        Book newBook = new Book();
-        newBook.setAuthorName(authorName);
-        newBook.setTitle(title);
-        newBook.setIsbn(isbn);
-
-        bookRepo.save(newBook);
+        if (result != null){
+            JSONObject jsonObj = new JSONObject(result);
+            String title = jsonObj.getString("title");
+            JSONArray authorArray = jsonObj.getJSONArray("authors");
+            JSONObject authorObj = authorArray.getJSONObject(0);
+            String authorEndpoint = authorObj.getString("key");
+            final String authorAPI = "https://openlibrary.org" + authorEndpoint + ".json";
+            String authorResult = restTemplate.getForObject(authorAPI, String.class);
+            JSONObject authObject = new JSONObject(authorResult);
+            String authorName = authObject.getString("name");
+    
+            Book newBook = new Book();
+            newBook.setAuthorName(authorName);
+            newBook.setTitle(title);
+            newBook.setIsbn(isbn);
+    
+            bookRepo.save(newBook);
+        }
+        
+        
     }
 
     public List<Book> findAll() {

@@ -20,11 +20,12 @@ public class BookControllerTest {
     private BookController controller;
     @Mock
     private BookService bookService;
-
+    @Mock 
+    private BookRepository bookRepo;
     @BeforeEach
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        controller = new BookController(bookService);
+        controller = new BookController(bookService,bookRepo);
     }
 
     @AfterEach
@@ -41,5 +42,10 @@ public class BookControllerTest {
         List<Book> result = controller.getBooks(request);
 
         assertEquals(books, result);
+    }
+
+    @Test
+    public void testAddBook() {
+        
     }
 }

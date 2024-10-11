@@ -17,6 +17,7 @@ public class Book {
     private String authorName;
     private String isbn;
     private String genre;
+    private int copies;
 
     public int getId() {
         return this.id;
@@ -56,6 +57,14 @@ public class Book {
 
     public void setGenre(String genre){
         this.genre = genre;
+    }
+
+    public int getCopies(){
+        return this.copies;
+    }
+
+    public void setCopies(int copies){
+        this.copies = copies;
     }
 
 }

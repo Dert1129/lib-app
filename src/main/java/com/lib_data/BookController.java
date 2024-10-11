@@ -13,18 +13,25 @@ import jakarta.servlet.http.HttpServletRequest;
 @Controller
 public class BookController {
     private BookService bookService;
+    private BookRepository bookRepo;
 
     @Autowired
-    public BookController(BookService bookService){
+    public BookController(BookService bookService, BookRepository bookRepo){
         this.bookService = bookService;
+        this.bookRepo = bookRepo;
     }
 
     @RequestMapping(value = "/api/addBook", method = RequestMethod.POST)
     public @ResponseBody String addIsbn(@RequestParam(value = "isbn") String isbn, HttpServletRequest request) throws Exception {
         if (!(isbn.isEmpty() || isbn.equals(null))){
 
-            bookService.addBook(isbn);
-            return "Added book!";
+            if (bookRepo.findByIsbn(isbn) == null){
+                bookService.addBook(isbn);
+                return "Added Book!";
+            }else{
+                return "This book already exists";
+            }
+
         }else{
             return null;
         }

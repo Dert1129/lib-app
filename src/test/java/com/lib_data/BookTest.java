@@ -45,4 +45,10 @@ public class BookTest {
         book.setGenre("horror");
         assertEquals("horror", book.getGenre());
     }
+
+    @Test
+    public void testSetCopies(){
+        book.setCopies(2);
+        assertEquals(2, book.getCopies());
+    }
 }
