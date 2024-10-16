@@ -1,4 +1,4 @@
-import './App.css';
+import './index.scss';
 import {Route, Routes, BrowserRouter} from "react-router-dom";
 import Catalog from './components/Catalog';
 import { createBrowserHistory } from 'history';

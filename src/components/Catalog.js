@@ -1,44 +1,61 @@
-import { useState } from 'react';
-import logo from '../logo.svg';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import BookPane from "./Book/BookPane.js"
+import Navigation from './Navbar/NavBar.js';
+import { Spinner, Row, Col } from 'reactstrap';
+import Sidebar from './Sidebar/Sidebar.js';
 function Catalog (props) {
 
     const [books, setBooks] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
-    axios.get("http://localhost:3030/api/books").then((res) => {
-        setBooks(res.data);
-        setIsLoaded(true);
-    })
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggle = () => setIsOpen(!isOpen);
+    const getBooks = () => {
+        axios.get("http://localhost:3030/api/books").then((res) => {
+            setBooks(res.data);
+            setIsLoaded(true);
+        })
+    }
+
+    useEffect(() => {
+        getBooks();
+    }, [])
+    
     let bookPanel = [];
-    bookPanel = books.map((element, index) => {
+        bookPanel = books.map((element, index) => {
         console.log(books[index]);
-        return <BookPane book={books[index]}/>
+        return (
+            <BookPane book={books[index]}/>
+        )
     })
     console.log(books);
-    return bookPanel;
     if(isLoaded){
-        return bookPanel;
+        return (
+            <>
+                <Row>
+                    <Col md="12" lg="12">
+                        <Navigation />
+                    </Col>
+                </Row>
+                <div className='height-wrapper'>
+                    <Row>
+                        <Col xl={3} className='filter-panel-wrapper'>
+                            <Sidebar />
+                        </Col>
+                        <Col xl={9} className='book-wrapper'>
+                            <div className='book-container'>
+                                {bookPanel}
+                            </div>
+                        </Col>
+                    </Row>
+                </div>   
+            </>
+        )
     }else{
-        return null;
+        return <Spinner color="info">
+        Loading...
+      </Spinner>
     }
-        // <BookPane books={books} isLoaded={isLoaded}/>
-        
-    //     <div>
-    //         <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //     <p>
-    //       Edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //     <a
-    //       className="App-link"
-    //       href="https://reactjs.org"
-    //       target="_blank"
-    //       rel="noopener noreferrer"
-    //     >
-    //       Learn React
-    //     </a>
-    //   </header>
-    //     </div>
 }
 export default Catalog;

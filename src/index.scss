@@ -1,0 +1,115 @@
+$header-height-padded: 59px;
+$footer-height-padded: 32px;
+$filter-height: 37px;
+$filter-min-width: 195px;
+$packages-filter-controls-sm-height: 186px;
+$packages-filter-controls-md-height: 112px;
+$packages-filter-controls-lg-height: 86px;
+$packages-submit-footer-height: 87px;
+$kpmp-blue: rgba(40, 60, 94, 1);
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fafbfc;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+img {
+    float:left;
+}
+
+.book {
+    border-top: 4px solid #7fd1de;
+}
+
+.height-wrapper {
+    min-height: calc(100vh - 143.5px);
+}
+
+.book-wrapper {
+    border-left: 1px solid #babec3;
+}
+
+.book-container{
+    display:flex;
+    background-color: #fff;
+    flex-direction: column;
+    flex-wrap:wrap;
+    row-gap: 1rem;
+}
+
+.content-wrapper {
+    flex: 1;
+    min-width: 1px;
+    padding-left: 1rem;
+}
+
+.book-thumb {
+    flex: 0 0 auto;
+    height: 100%;
+    width: 160px;
+    max-width: 160px;
+    float:left;
+}
+
+.filter-panel-wrapper {
+    contain: content;
+}
+
+.book-thumb img {
+    display: block;
+}
+
+.sidebar-container {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .toggle-button {
+    margin-right: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  
+  .sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    background-color: #111;
+    color: white;
+    transition: 0.3s;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .sidebar h2 {
+    padding: 15px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    padding: 10px;
+    text-align: left;
+  }
+  

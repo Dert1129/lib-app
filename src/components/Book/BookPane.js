@@ -1,19 +1,17 @@
-import { CardBody, CardSubtitle, CardText, CardTitle, Col, Row, Card } from "reactstrap";
+import { CardBody, CardSubtitle, CardText, CardTitle, Row, Card, Col,  } from "reactstrap";
 
 function BookPane({book}) {
-    console.log(book)
     return(
-        <Row>
-            <Card outline style={{width: "18rem"}} className="my-2">
-                <img src="https://picsum.photos/300/200"></img>
-                <CardBody>
-                    <CardTitle tag={"h5"}>{book.title}</CardTitle>
-                </CardBody>
-                <CardSubtitle className="mb-2 text-muted">{book.authorName}</CardSubtitle>
-                <CardText>Copies: {book.copies} ISBN: {book.isbn}</CardText>
-            </Card>
-        </Row>
+        <div className="book shadow-sm">
+            <img classNam="book-thumb" src="https://picsum.photos/300/200"></img>
+            <Row className="content-wrapper">
+                <Col xs={12} className="pb-1"><b>{book.title}</b></Col>
+                <Col xs={12} className="pb-1">{book.authorName}</Col>
+                <Col xs={12} className="pb-1">{book.isbn}</Col>
+            </Row>
+        </div>
     )
     
 }
+
 export default BookPane;

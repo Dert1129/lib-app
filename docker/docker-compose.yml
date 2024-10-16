@@ -43,7 +43,8 @@ services:
     image: nginx
     restart: always
     volumes:
-      - ${ENV_REACT_APP}/build:/usr/share/nginx/html
+      - ${ENV_REACT_APP}/build/:/usr/share/nginx/html
+      - ${ENV_CONF_DIR}:/etc/nginx/conf.d
     environment: 
       TZ: "America/Detroit"
     ports:
@@ -61,6 +62,7 @@ services:
   lib-spring:
     container_name: lib-spring
     image: ${ENV_LIB_CONTAINER} 
+    restart: always
     depends_on: 
       - mariadb
     ports:
@@ -86,7 +88,4 @@ networks:
   local:
     name: library
     ipam:
-      driver: default
-      config:
-        - 
-          subnet: 10.12.0.0/16
+      driver: bridge
