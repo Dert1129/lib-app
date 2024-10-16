@@ -8,9 +8,6 @@ function Catalog (props) {
 
     const [books, setBooks] = useState([]);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-
-    const toggle = () => setIsOpen(!isOpen);
     const getBooks = () => {
         axios.get("http://localhost:3030/api/books").then((res) => {
             setBooks(res.data);

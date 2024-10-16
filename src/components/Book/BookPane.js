@@ -1,4 +1,4 @@
-import { CardBody, CardSubtitle, CardText, CardTitle, Row, Card, Col,  } from "reactstrap";
+import {Row, Col } from "reactstrap";
 
 function BookPane({book}) {
     return(

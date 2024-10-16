@@ -64,19 +64,21 @@ img {
     contain: content;
 }
 
-.book-thumb img {
-    display: block;
-}
-
 .sidebar-container {
     display: flex;
     align-items: flex-start;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
   }
   
   .toggle-button {
     margin-right: 10px;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #111;
     color: white;
     border: none;
     cursor: pointer;

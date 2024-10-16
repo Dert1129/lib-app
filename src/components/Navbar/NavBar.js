@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Collapse,
   Navbar,
-  NavbarToggler,
   NavbarBrand,
   Nav,
   NavItem,
@@ -10,10 +8,6 @@ import {
 } from 'reactstrap';
 
 function Navigation(props) {
-  const [collapsed, setCollapsed] = useState(true);
-
-  const toggleNavbar = () => setCollapsed(!collapsed);
-
   return (
     <div>
       <Navbar color="faded" light>
