@@ -17,7 +17,9 @@ public class Book {
     private String authorName;
     private String isbn;
     private String genre;
-    private int copies;
+    private String imageLink;
+    private int read;
+
 
     public int getId() {
         return this.id;
@@ -59,12 +61,19 @@ public class Book {
         this.genre = genre;
     }
 
-    public int getCopies(){
-        return this.copies;
+    public String getImageLink () {
+        return imageLink;
     }
 
-    public void setCopies(int copies){
-        this.copies = copies;
+    public void setImageLink (String imageLink){
+        this.imageLink = imageLink;
     }
 
+    public int getRead() {
+        return read;
+    }
+
+    public void setRead(int read){
+        this.read = read;
+    }
 }

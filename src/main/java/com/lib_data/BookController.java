@@ -1,7 +1,9 @@
 package com.lib_data;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +47,24 @@ public class BookController {
             return book;
         }catch (Exception e) {
             System.out.println(e);
+            return null;
+        }
+    }
+
+    @RequestMapping(value = "/api/markRead", method = RequestMethod.POST)
+    public @ResponseBody String markAsRead(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
+        String isbn = (String) payload.get("isbn");
+        Integer read = (Integer) payload.get("read");
+
+        if (!(isbn.isEmpty() || isbn.equals(null))){
+            try {
+                bookService.markAsRead(isbn, read);
+                return "Marked read as " + read.toString();
+            } catch (Exception e) {
+                System.out.println(e);
+                return null;
+            }
+        } else {
             return null;
         }
     }

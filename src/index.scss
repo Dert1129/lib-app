@@ -23,11 +23,20 @@ code {
 }
 
 img {
+    padding-left: 1rem;
+    padding-top: 1rem;
     float:left;
+}
+
+#mark-read-button {
+    padding: 1rem;
+    float: left;
+    cursor: pointer
 }
 
 .book {
     border-top: 4px solid #7fd1de;
+    height: 30vh;
 }
 
 .height-wrapper {
@@ -44,6 +53,7 @@ img {
     flex-direction: column;
     flex-wrap:wrap;
     row-gap: 1rem;
+    width: 72vw;
 }
 
 .content-wrapper {
@@ -64,15 +74,22 @@ img {
     contain: content;
 }
 
+.edit-icon-wrapper{
+    display: flex;
+    justify-content: end;
+    padding: 1rem;
+}
+
+
 .sidebar-container {
     display: flex;
     align-items: flex-start;
+    flex-direction: row;
   }
 
   .button-container {
     display: flex;
-    justify-content: flex-end;
-    flex-direction: row;
+    justify-content: end;
   }
   
   .toggle-button {
@@ -86,15 +103,16 @@ img {
   }
   
   .sidebar {
-    width: 250px;
+    width: 20rem;
     position: fixed;
     top: 0;
-    left: -250px;
+    left: -20rem;
     background-color: #111;
     color: white;
     transition: 0.3s;
     overflow-x: hidden;
-    padding-top: 20px;
+    padding-top: 30px;
+    height: 100%;
   }
   
   .sidebar.open {

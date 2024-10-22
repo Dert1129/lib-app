@@ -72,6 +72,7 @@ services:
       MYSQL_HOST: ${ENV_MYSQL_HOST}
       MYSQL_USER: ${ENV_MYSQL_USER}
       MYSQL_PASSWORD: ${ENV_MYSQL_PASSWORD}
+      GOOGLE_BOOKS_API_KEY: ${ENV_GOOGLE_BOOKS_API_KEY}
       TZ: "America/Detroit"
     privileged: true
     networks:
@@ -87,5 +88,3 @@ volumes:
 networks:
   local:
     name: library
-    ipam:
-      driver: bridge

@@ -47,8 +47,9 @@ public class BookTest {
     }
 
     @Test
-    public void testSetCopies(){
-        book.setCopies(2);
-        assertEquals(2, book.getCopies());
+    public void testSetImageLink() {
+        book.setImageLink("blah");
+        assertEquals("blah", book.getImageLink());
     }
+
 }
