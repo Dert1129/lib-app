@@ -65,28 +65,25 @@ function Catalog (props) {
                         <Navigation />
                     </Col>
                 </Row>
-                <div className='height-wrapper'>
-                    <Row>
-                        <Col xl={3} className='filter-panel-wrapper'>
-                            <Sidebar />
-                        </Col>
-                        <Col xl={9} className='book-wrapper'>
-                            <div className='book-container'>
-                                <TextField id="outlined-basic"
-                                onChange={inputHandler}
-                                variant="outlined"
-                                fullWidth
-                                label="Search book title..." />
-
-                                <BookPane 
-                                    input={inputText} 
-                                    bookList={books} 
-                                    clickState={clickState}
-                                    setBookAsRead={setBookAsRead}/>
-                            </div>
-                        </Col>
-                    </Row>
-                </div>   
+                <Row className='height-wrapper'>
+                    <Col xl={3} className='filter-panel-wrapper'>
+                        <Sidebar />
+                    </Col>
+                    <Col xl={9} className='book-wrapper'>
+                        <div className='book-container'>
+                            <TextField id="outlined-basic"
+                            onChange={inputHandler}
+                            variant="outlined"
+                            fullWidth
+                            label="Search book title..." />
+                            <BookPane 
+                                input={inputText} 
+                                bookList={books} 
+                                clickState={clickState}
+                                setBookAsRead={setBookAsRead}/>
+                        </div>
+                    </Col>
+                </Row>
             </>
         )
     }else{
