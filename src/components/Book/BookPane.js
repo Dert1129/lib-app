@@ -29,9 +29,9 @@ function BookPane({clickState, setBookAsRead, bookList, input}) {
                 <div className="book-main-content">
                     {!clickState[item.isbn] ? 
 
-                    <div id="mark-read-button" onClick={() => setBookAsRead(item.isbn, 0)}><FontAwesomeIcon icon={faRegularBookmark} /><span className="read-text">Mark read</span></div>
+                    <div id="mark-read-button" onClick={() => setBookAsRead(item.isbn)}><FontAwesomeIcon icon={faRegularBookmark} /><span className="read-text">Mark read</span></div>
                     : 
-                    <div id="mark-read-button" onClick={() => setBookAsRead(item.isbn, 0)}><FontAwesomeIcon icon={faBookmark} /><span className="read-text">Marked read</span></div>}
+                    <div id="mark-read-button" onClick={() => setBookAsRead(item.isbn)}><FontAwesomeIcon icon={faBookmark} /><span className="read-text">Marked read</span></div>}
 
                     <img className="book-thumb shadow-sm" src={item.imageLink} alt={item.title}></img>
                     

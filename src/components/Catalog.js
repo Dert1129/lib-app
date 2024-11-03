@@ -40,7 +40,7 @@ function Catalog (props) {
 
     useEffect( () => { getBooks() }, [])
 
-    const setBookAsRead = (isbn, read) => {
+    const setBookAsRead = (isbn) => {
         const currentRead = clickState[isbn] ? 1 : 0;
 
         const newRead = currentRead === 1 ? 0 : 1;
