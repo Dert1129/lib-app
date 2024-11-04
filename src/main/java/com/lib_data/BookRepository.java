@@ -23,4 +23,7 @@ public interface BookRepository extends CrudRepository<Book, Integer>{
     @Modifying
     @Query(value = "UPDATE Library.books SET books.is_read = :isRead where isbn = :isbn", nativeQuery = true)
     public void setBookAsRead(@Param("isbn") String isbn, @Param("isRead") Integer isRead);
+
+    @Transactional
+    public void deleteByIsbn(String isbn);
 }

@@ -24,7 +24,12 @@ public class BookService {
         this.bookRepo = bookRepo;
     }
 
-
+    public void deleteBook(String isbn) {
+        Book book = bookRepo.findByIsbn(isbn);
+        if (book != null){
+            bookRepo.deleteByIsbn(isbn);
+        }
+    }
 
     public void markAsRead(String isbn, Integer read) {
         bookRepo.setBookAsRead(isbn, read);

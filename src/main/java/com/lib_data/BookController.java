@@ -23,6 +23,22 @@ public class BookController {
         this.bookRepo = bookRepo;
     }
 
+    @RequestMapping(value = "/api/deleteBook", method = RequestMethod.DELETE)
+    public @ResponseBody String deleteBook(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
+        String isbn = (String) payload.get("isbn");
+        if (bookRepo.findByIsbn(isbn) != null && !(isbn.isEmpty() || isbn == null)){
+            try {
+                bookRepo.deleteByIsbn(isbn);
+                return "Deleted book with isbn: " + isbn;
+            } catch (Exception e) {
+                System.out.println(e);
+                return "Could not delete book with isbn: " + isbn; 
+            }
+        }else{
+            return null;
+        }
+    }
+
     @RequestMapping(value = "/api/addBook", method = RequestMethod.POST)
     public @ResponseBody String addIsbn(@RequestParam(value = "isbn") String isbn, HttpServletRequest request) throws Exception {
         if (!(isbn.isEmpty() || isbn.equals(null))){
