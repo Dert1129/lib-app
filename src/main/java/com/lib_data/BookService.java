@@ -40,6 +40,15 @@ public class BookService {
         return bookRepo.findByIsbn(isbn);
     }
 
+    public void addCopy(String isbn){
+        Book book = bookRepo.findByIsbn(isbn);
+        Integer copies = bookRepo.getCopiesByIsbn(isbn);
+        Integer newCopies = copies + 1;
+        if(book != null){
+            bookRepo.addCopies(isbn, newCopies);
+        }
+    }
+
     public void addBook(String isbn) {
         Book book = findBook(isbn);
         if (book == null){
@@ -48,16 +57,23 @@ public class BookService {
             String result = restTemplate.getForObject(uri, String.class);
             JSONObject jsonObject = new JSONObject(result);
             String totalItems = jsonObject.get("totalItems").toString();
+            Integer totalItemsInt = Integer.parseInt(totalItems);
     
-            if(totalItems != "0"){
+            if(totalItemsInt != 0){
                 JSONArray itemsArr = jsonObject.getJSONArray("items");
                 JSONObject itemsObj = itemsArr.getJSONObject(0);
                 JSONObject volumeInfo = itemsObj.getJSONObject("volumeInfo");
                 JSONArray authorArr = volumeInfo.getJSONArray("authors");
                 String author = authorArr.get(0).toString();
                 String title = volumeInfo.getString("title");
+                String description = volumeInfo.getString("description");
                 JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
                 String thumbnail = imageLinks.getString("thumbnail");
+                JSONArray categoriesArr = volumeInfo.getJSONArray("categories");
+                String category = categoriesArr.get(0).toString();
+                System.out.println(category);
+                String publisher = volumeInfo.getString("publisher");
+
     
                 Book newBook = new Book();
                 newBook.setAuthorName(author);
@@ -66,6 +82,10 @@ public class BookService {
                 newBook.setImageLink(thumbnail);
                 newBook.setGenre(null);
                 newBook.setRead(0);
+                newBook.setCopies(1);
+                newBook.setDescription(description);
+                newBook.setCategory(category);
+                newBook.setPublisher(publisher);
     
                 bookRepo.save(newBook);
             }

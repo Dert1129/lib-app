@@ -21,6 +21,10 @@ public class Book {
     private String imageLink;
     @Column(name = "is_read")
     private int read;
+    private int copies;
+    private String description;
+    private String category;
+    private String publisher;
 
 
     public int getId() {
@@ -77,5 +81,37 @@ public class Book {
 
     public void setRead(int read){
         this.read = read;
+    }
+
+    public int getCopies() {
+        return copies;
+    }
+
+    public void setCopies(Integer copies){
+        this.copies = copies;
+    }
+
+    public String getDescription(){
+        return description;
+    }
+
+    public void setDescription(String description){
+        this.description = description;
+    }
+
+    public String getCategory(){
+        return category;
+    }
+
+    public void setCategory(String category){
+        this.category = category;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher){
+        this.publisher = publisher;
     }
 }

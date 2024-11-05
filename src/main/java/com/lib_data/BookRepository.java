@@ -26,4 +26,12 @@ public interface BookRepository extends CrudRepository<Book, Integer>{
 
     @Transactional
     public void deleteByIsbn(String isbn);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE Library.books SET books.copies = :copies where isbn = :isbn", nativeQuery = true)
+    public void addCopies(@Param("isbn") String isbn, @Param("copies") Integer copies);
+
+    @Query(value = "select copies from Library.books where isbn= :isbn", nativeQuery = true)
+    public Integer getCopiesByIsbn(@Param ("isbn") String isbn);
 }

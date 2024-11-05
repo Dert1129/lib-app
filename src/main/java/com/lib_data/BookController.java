@@ -55,6 +55,21 @@ public class BookController {
         }
     }
 
+    @RequestMapping(value = "/api/addCopy", method = RequestMethod.POST)
+    public @ResponseBody String addCopy(@RequestParam(value = "isbn") String isbn, HttpServletRequest request) throws Exception {
+        if (!(isbn.isEmpty() || isbn.equals(null))){
+            if(bookRepo.findByIsbn(isbn) != null){
+                bookService.addCopy(isbn);
+                return "Added copy";
+            }else{
+
+                return "Could not add copy";
+            }
+        }else{
+            return null;
+        }
+    }
+
     @RequestMapping(value = "/api/books", method = RequestMethod.GET)
     public @ResponseBody List<Book> getBooks(HttpServletRequest request) {
         List<Book> book;
