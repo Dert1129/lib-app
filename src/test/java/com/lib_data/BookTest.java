@@ -52,4 +52,34 @@ public class BookTest {
         assertEquals("blah", book.getImageLink());
     }
 
+    @Test
+    public void testSetIsRead() {
+        book.setRead(1);
+        assertEquals(1, book.getRead());
+    }
+
+    @Test
+    public void testSetCopies() {
+        book.setCopies(11);
+        assertEquals(11, book.getCopies());
+    }
+
+    @Test
+    public void testSetDescription() {
+        book.setDescription("description");
+        assertEquals("description", book.getDescription());
+    }
+
+    @Test
+    public void testSetCategory(){
+        book.setCategory("non-fiction");
+        assertEquals("non-fiction", book.getCategory());
+    }
+
+    @Test
+    public void testSetPublisher() {
+        book.setPublisher("publisher");
+        assertEquals("publisher", book.getPublisher());
+    }
+
 }
