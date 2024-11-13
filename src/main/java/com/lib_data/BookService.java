@@ -24,6 +24,13 @@ public class BookService {
         this.bookRepo = bookRepo;
     }
 
+    public void addManual(String isbn, String category, String title, String publisher, String genre, Integer copies){
+        Book book = bookRepo.findByIsbn(isbn);
+        if(book == null){
+            
+        }
+    }
+
     public void deleteBook(String isbn) {
         Book book = bookRepo.findByIsbn(isbn);
         if (book != null){
@@ -49,32 +56,37 @@ public class BookService {
         }
     }
 
-    public void addBook(String isbn) {
-        Book book = findBook(isbn);
-        if (book == null){
-            final String uri = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&key=" + apiKey;
-            RestTemplate restTemplate = new RestTemplate();
+    public String addBook(String isbn) {
+        final String uri = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&key=" + apiKey;
+        RestTemplate restTemplate = new RestTemplate();
+        System.out.println("making restTemplate");
+        
+        try {
+            System.out.println("inside of try");
             String result = restTemplate.getForObject(uri, String.class);
             JSONObject jsonObject = new JSONObject(result);
-            String totalItems = jsonObject.get("totalItems").toString();
-            Integer totalItemsInt = Integer.parseInt(totalItems);
     
-            if(totalItemsInt != 0){
+            // Check if totalItems is 0 before parsing further
+            int totalItems = jsonObject.optInt("totalItems", 0);
+            System.out.println(totalItems);
+    
+            if (totalItems == 0) {
+                return "Book could not be found";
+            } else {
+                // Only proceed if totalItems is greater than 0
                 JSONArray itemsArr = jsonObject.getJSONArray("items");
                 JSONObject itemsObj = itemsArr.getJSONObject(0);
                 JSONObject volumeInfo = itemsObj.getJSONObject("volumeInfo");
                 JSONArray authorArr = volumeInfo.getJSONArray("authors");
                 String author = authorArr.get(0).toString();
                 String title = volumeInfo.getString("title");
-                String description = volumeInfo.getString("description");
+                String description = volumeInfo.optString("description", "");
                 JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
                 String thumbnail = imageLinks.getString("thumbnail");
                 JSONArray categoriesArr = volumeInfo.getJSONArray("categories");
                 String category = categoriesArr.get(0).toString();
-                System.out.println(category);
-                String publisher = volumeInfo.getString("publisher");
-
-    
+                String publisher = volumeInfo.optString("publisher", "Unknown");
+                
                 Book newBook = new Book();
                 newBook.setAuthorName(author);
                 newBook.setTitle(title);
@@ -88,11 +100,14 @@ public class BookService {
                 newBook.setPublisher(publisher);
     
                 bookRepo.save(newBook);
+                return "Book added successfully";
             }
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+            return "An error occurred while adding the book"; // Handle exception
         }
-        
     }
-
+    
     public List<Book> findAll() {
         return bookRepo.findAll();
     }

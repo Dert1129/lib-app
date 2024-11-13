@@ -22,7 +22,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.test.context.TestPropertySource;
+@TestPropertySource("classpath:application-test.properties")
 public class BookServiceTest {
     
     @Mock
@@ -42,6 +43,26 @@ public class BookServiceTest {
 		MockitoAnnotations.openMocks(this).close();
         bookService = null;
 	}
+
+    @Test
+    public void testAddBook_whenTotalItemsIsZero_thenReturnBookNotFound() {
+        String isbn = "1234567890";
+
+        // Mock RestTemplate response to simulate API returning totalItems as 0
+        String jsonResponse = new JSONObject()
+                .put("kind", "books#volumes")
+                .put("totalItems", 0)
+                .toString();
+
+        // Mock the RestTemplate call to return our simulated response
+        when(restTemplate.getForObject(anyString(), eq(String.class))).thenReturn(jsonResponse);
+
+        // Execute the method under test
+        String result = bookService.addBook(isbn);
+
+        // Verify the result
+        assertEquals("Book could not be found", result);
+    }
 
     @Test
     public void testFindAll() throws Exception {
@@ -139,7 +160,7 @@ void testAddBook_BookDoesNotExistAndIsFetched() {
     }
 
     @Test
-void testAddBook_InvalidApiKey() {
+    void testAddBook_InvalidApiKey() {
     String isbn = "1234567890";
     when(bookService.findBook(isbn)).thenReturn(null);
 

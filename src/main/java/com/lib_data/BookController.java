@@ -23,6 +23,23 @@ public class BookController {
         this.bookRepo = bookRepo;
     }
 
+    @RequestMapping(value = "/api/addManual", method =  RequestMethod.POST)
+    public @ResponseBody String addManual(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
+        String title = payload.get("title").toString();
+        String category =  payload.get("category").toString();
+        String isbn = payload.get("isbn").toString();
+        String publisher = payload.get("publisher").toString();
+        String genre = payload.get("genre").toString();
+        Integer copies = (Integer) payload.get("copies");
+        if (bookRepo.findByIsbn(isbn) != null){
+            bookService.addManual(isbn, category, title, publisher, genre, copies);
+            return "Added book manually";
+        }else{
+            return "Book exists in catelog";
+        }
+
+    }
+
     @RequestMapping(value = "/api/deleteBook", method = RequestMethod.DELETE)
     public @ResponseBody String deleteBook(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
         String isbn = (String) payload.get("isbn");
@@ -44,8 +61,13 @@ public class BookController {
         if (!(isbn.isEmpty() || isbn.equals(null))){
 
             if (bookRepo.findByIsbn(isbn) == null){
-                bookService.addBook(isbn);
-                return "Added Book!";
+                String response = bookService.addBook(isbn);
+                System.out.println(response);
+                if (response == "Book added successfully"){
+                    return "Added book";
+                }else{
+                    return "There was a problem adding the book";
+                }
             }else{
                 return "This book already exists";
             }
