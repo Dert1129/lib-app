@@ -24,10 +24,13 @@ public class BookService {
         this.bookRepo = bookRepo;
     }
 
-    public void addManual(String isbn, String category, String title, String publisher, String genre, Integer copies){
+    public String addManual(String isbn, String category, String title, String publisher, String genre, Integer copies){
         Book book = bookRepo.findByIsbn(isbn);
         if(book == null){
-            
+            bookRepo.updateBookByIsbn(title, genre, genre, title, category, publisher, genre, isbn);
+            return "Updated Book";
+        }else{
+            return "Book is not in Library";
         }
     }
 

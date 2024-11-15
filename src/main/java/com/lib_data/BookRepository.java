@@ -34,4 +34,9 @@ public interface BookRepository extends CrudRepository<Book, Integer>{
 
     @Query(value = "select copies from Library.books where isbn= :isbn", nativeQuery = true)
     public Integer getCopiesByIsbn(@Param ("isbn") String isbn);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE Library.books SET books.title = :title, books.genre = :genre, books.author_name = :authorName, books.description = :description, books.category = :category, books.publisher = :publisher, books.copies = :copies WHERE isbn = :isbn", nativeQuery = true)
+    public void updateBookByIsbn(@Param("title") String title, @Param("genre") String genre, @Param("authorName") String authorName, @Param("description") String description, @Param("category") String category, @Param("publisher") String pubisher, @Param("copies") String copies, @Param("isbn") String isbn);
 }
