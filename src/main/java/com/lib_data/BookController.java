@@ -41,22 +41,36 @@ public class BookController {
 
     }
 
-    // @RequestMapping(value = "/api/addManual", method =  RequestMethod.POST)
-    // public @ResponseBody String addManual(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
-    //     String title = payload.get("title").toString();
-    //     String category =  payload.get("category").toString();
-    //     String isbn = payload.get("isbn").toString();
-    //     String publisher = payload.get("publisher").toString();
-    //     String genre = payload.get("genre").toString();
-    //     Integer copies = (Integer) payload.get("copies");
-    //     if (bookRepo.findByIsbn(isbn) != null){
-    //         bookService.addManual(isbn, category, title, publisher, genre, copies);
-    //         return "Added book manually";
-    //     }else{
-    //         return "Book exists in catelog";
-    //     }
+    @RequestMapping(value = "/api/getBook", method =  RequestMethod.GET)
+    public @ResponseBody Book getBook(@RequestParam(value = "isbn") String isbn, HttpServletRequest request) throws Exception {
+        try{
+            return bookService.findBook(isbn);
+        }catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
 
-    // }
+    }
+
+    @RequestMapping(value = "/api/addManual", method =  RequestMethod.POST)
+    public @ResponseBody String addManual(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
+        String title = payload.get("title").toString();
+        String category =  payload.get("category").toString();
+        String isbn = payload.get("isbn").toString();
+        String publisher = payload.get("publisher").toString();
+        String genre = payload.get("genre").toString();
+        String author = payload.get("authorName").toString();
+        Integer copies = (Integer) payload.get("copies");
+        if (bookRepo.findByIsbn(isbn) != null){
+            bookService.addManual(isbn, category, title, publisher, author, genre, copies);
+            return "Added book manually";
+        }else{
+            return "Book exists in catelog";
+        }
+
+    }
+
+
 
     @RequestMapping(value = "/api/deleteBook", method = RequestMethod.DELETE)
     public @ResponseBody String deleteBook(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
