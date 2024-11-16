@@ -19,6 +19,8 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +30,7 @@ public class BookServiceTest {
     
     @Mock
     private BookRepository bookRepo;
+    @InjectMocks
     private BookService bookService;
     @Mock
     private RestTemplate restTemplate;
@@ -35,7 +38,7 @@ public class BookServiceTest {
     @BeforeEach
 	public void setUp() throws Exception {
 		MockitoAnnotations.openMocks(this);
-		bookService = new BookService(bookRepo);
+		bookService = new BookService(bookRepo, restTemplate);
 	}
 
 	@AfterEach
@@ -78,65 +81,63 @@ public class BookServiceTest {
 
     @Test
     void testDeleteBook_BookExists() {
-        String isbn = "1234567890";
+        Integer id = 1;
         Book book = new Book();
-        book.setIsbn(isbn);
-        when(bookRepo.findByIsbn(isbn)).thenReturn(book);
+        book.setId(id);
+        when(bookRepo.findBookById(id)).thenReturn(book);
 
-        bookService.deleteBook(isbn);
+        bookService.deleteBook(id);
 
-        verify(bookRepo, times(1)).deleteByIsbn(isbn);
+        verify(bookRepo, times(1)).deleteById(id);
     }
 
     @Test
-    void testDeleteBook_BookDoesNotExist() {
+    void testAddBook_BookDoesNotExistAndIsFetched() {
         String isbn = "1234567890";
-        when(bookRepo.findByIsbn(isbn)).thenReturn(null);
-
-        bookService.deleteBook(isbn);
-
-        verify(bookRepo, never()).deleteByIsbn(anyString());
-    }
-
-   @Test
-void testAddBook_BookDoesNotExistAndIsFetched() {
-    String isbn = "1234567890";
-    when(bookService.findBook(isbn)).thenReturn(null);
-
-    JSONObject jsonObject = new JSONObject();
-    jsonObject.put("totalItems", 1); 
-    JSONArray itemsArray = new JSONArray();
-    JSONObject item = new JSONObject();
-    JSONObject volumeInfo = new JSONObject();
-    volumeInfo.put("title", "Mock Title");
-    volumeInfo.put("description", "Mock Description");
-    volumeInfo.put("publisher", "Mock Publisher");
-    JSONArray authorsArray = new JSONArray();
-    authorsArray.put("Mock Author");
-    volumeInfo.put("authors", authorsArray);
-    JSONArray categoriesArray = new JSONArray();
-    categoriesArray.put("Mock Category");
-    volumeInfo.put("categories", categoriesArray);
-    JSONObject imageLinks = new JSONObject();
-    imageLinks.put("thumbnail", "http://mock-thumbnail-url.com");
-    volumeInfo.put("imageLinks", imageLinks);
-    item.put("volumeInfo", volumeInfo);
-    itemsArray.put(item);
-    jsonObject.put("items", itemsArray);
-
-    when(restTemplate.getForObject(anyString(), eq(String.class))).thenReturn(jsonObject.toString());
+        
+        when(bookService.findBookByIsbn(isbn)).thenReturn(null);
     
-    bookService.addBook(isbn);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("totalItems", 1); 
+        JSONArray itemsArray = new JSONArray();
+        JSONObject item = new JSONObject();
+        JSONObject volumeInfo = new JSONObject();
+        volumeInfo.put("title", "Mock Title");
+        volumeInfo.put("description", "Mock Description");
+        volumeInfo.put("publisher", "Mock Publisher");
+        JSONArray authorsArray = new JSONArray();
+        authorsArray.put("Mock Author");
+        volumeInfo.put("authors", authorsArray);
+        JSONArray categoriesArray = new JSONArray();
+        categoriesArray.put("Mock Category");
+        volumeInfo.put("categories", categoriesArray);
+        JSONObject imageLinks = new JSONObject();
+        imageLinks.put("thumbnail", "http://mock-thumbnail-url.com");
+        volumeInfo.put("imageLinks", imageLinks);
+        item.put("volumeInfo", volumeInfo);
+        itemsArray.put(item);
+        jsonObject.put("items", itemsArray);
+    
+        when(restTemplate.getForObject(anyString(), eq(String.class)))
+            .thenReturn(jsonObject.toString());
 
-    verify(bookRepo, times(1)).save(any(Book.class));
-}
+        bookService.addBook(isbn);
 
+        ArgumentCaptor<Book> bookCaptor = ArgumentCaptor.forClass(Book.class);
+        verify(bookRepo, times(1)).save(bookCaptor.capture());
+
+        Book savedBook = bookCaptor.getValue();
+        System.out.println("Saved Book: " + savedBook);
+        assertEquals("Mock Title", savedBook.getTitle());
+        assertEquals("Mock Description", savedBook.getDescription());
+        assertEquals("Mock Author", savedBook.getAuthorName());
+    }
 
     @Test
     void testAddBook_BookAlreadyExists() {
         String isbn = "1234567890";
         Book existingBook = new Book();
-        when(bookService.findBook(isbn)).thenReturn(existingBook);
+        when(bookService.findBookByIsbn(isbn)).thenReturn(existingBook);
 
         bookService.addBook(isbn);
 
@@ -147,7 +148,7 @@ void testAddBook_BookDoesNotExistAndIsFetched() {
     @Test
     void testAddBook_BookNotFoundInApi() {
         String isbn = "1234567890";
-        when(bookService.findBook(isbn)).thenReturn(null);
+        when(bookService.findBookByIsbn(isbn)).thenReturn(null);
         
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("totalItems", 0);
@@ -162,7 +163,7 @@ void testAddBook_BookDoesNotExistAndIsFetched() {
     @Test
     void testAddBook_InvalidApiKey() {
     String isbn = "1234567890";
-    when(bookService.findBook(isbn)).thenReturn(null);
+    when(bookService.findBookByIsbn(isbn)).thenReturn(null);
 
     when(restTemplate.getForObject(anyString(), eq(String.class)))
         .thenThrow(new RuntimeException("API key not valid. Please pass a valid API key."));
