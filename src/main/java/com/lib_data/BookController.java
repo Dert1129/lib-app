@@ -27,13 +27,13 @@ public class BookController {
     public @ResponseBody String editBook(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
         String title = payload.get("title").toString();
         String category =  payload.get("category").toString();
-        String isbn = payload.get("isbn").toString();
+        Integer id = (Integer) payload.get("id");
         String publisher = payload.get("publisher").toString();
         String genre = payload.get("genre").toString();
         String authorName = payload.get("authorName").toString();
         Integer copies = (Integer) payload.get("copies");
-        if (bookRepo.findByIsbn(isbn) != null){
-            bookService.editBook(isbn, category, title, authorName, publisher, genre, copies);
+        if (bookRepo.findBookById(id) != null){
+            bookService.editBook(id, category, title, authorName, publisher, genre, copies);
             return "Updated book";
         }else{
             return "Book could not be updated";
@@ -42,9 +42,9 @@ public class BookController {
     }
 
     @RequestMapping(value = "/api/getBook", method =  RequestMethod.GET)
-    public @ResponseBody Book getBook(@RequestParam(value = "isbn") String isbn, HttpServletRequest request) throws Exception {
+    public @ResponseBody Book getBook(@RequestParam(value = "id") Integer id, HttpServletRequest request) throws Exception {
         try{
-            return bookService.findBook(isbn);
+            return bookService.findBookById(id);
         }catch (Exception e) {
             System.out.println(e);
             return null;
@@ -54,6 +54,7 @@ public class BookController {
 
     @RequestMapping(value = "/api/addManual", method =  RequestMethod.POST)
     public @ResponseBody String addManual(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
+        // if isbn is null (aka, google books can't find the book how do i check if the book exists?)  Figure out this problem later
         String title = payload.get("title").toString();
         String category =  payload.get("category").toString();
         String isbn = payload.get("isbn").toString();
@@ -61,7 +62,7 @@ public class BookController {
         String genre = payload.get("genre").toString();
         String author = payload.get("authorName").toString();
         Integer copies = (Integer) payload.get("copies");
-        if (bookRepo.findByIsbn(isbn) != null){
+        if (bookRepo.findByIsbn(isbn) == null){
             bookService.addManual(isbn, category, title, publisher, author, genre, copies);
             return "Added book manually";
         }else{
@@ -74,14 +75,14 @@ public class BookController {
 
     @RequestMapping(value = "/api/deleteBook", method = RequestMethod.DELETE)
     public @ResponseBody String deleteBook(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
-        String isbn = (String) payload.get("isbn");
-        if (bookRepo.findByIsbn(isbn) != null && !(isbn.isEmpty() || isbn == null)){
+        Integer id = (Integer) payload.get("id");
+        if (bookRepo.findBookById(id) != null && !(id == null)){
             try {
-                bookRepo.deleteByIsbn(isbn);
-                return "Deleted book with isbn: " + isbn;
+                bookRepo.deleteById(id);
+                return "Deleted book with isbn: " + id;
             } catch (Exception e) {
                 System.out.println(e);
-                return "Could not delete book with isbn: " + isbn; 
+                return "Could not delete book with isbn: " + id; 
             }
         }else{
             return null;
@@ -110,10 +111,10 @@ public class BookController {
     }
 
     @RequestMapping(value = "/api/addCopy", method = RequestMethod.POST)
-    public @ResponseBody String addCopy(@RequestParam(value = "isbn") String isbn, HttpServletRequest request) throws Exception {
-        if (!(isbn.isEmpty() || isbn.equals(null))){
-            if(bookRepo.findByIsbn(isbn) != null){
-                bookService.addCopy(isbn);
+    public @ResponseBody String addCopy(@RequestParam(value = "isbn") Integer id, HttpServletRequest request) throws Exception {
+        if (id != null){
+            if(bookRepo.findBookById(id) != null){
+                bookService.addCopy(id);
                 return "Added copy";
             }else{
 
@@ -138,12 +139,12 @@ public class BookController {
 
     @RequestMapping(value = "/api/markRead", method = RequestMethod.POST)
     public @ResponseBody String markAsRead(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
-        String isbn = (String) payload.get("isbn");
+        Integer id = (Integer) payload.get("id");
         Integer read = (Integer) payload.get("read");
 
-        if (!(isbn.isEmpty() || isbn.equals(null))){
+        if (id != null){
             try {
-                bookService.markAsRead(isbn, read);
+                bookService.markAsRead(id, read);
                 return "Marked read as " + read.toString();
             } catch (Exception e) {
                 System.out.println(e);

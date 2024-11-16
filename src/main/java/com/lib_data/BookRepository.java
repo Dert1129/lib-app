@@ -19,24 +19,30 @@ public interface BookRepository extends CrudRepository<Book, Integer>{
 
     public Book findByIsbn(String Isbn);
 
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE Library.books SET books.is_read = :isRead where isbn = :isbn", nativeQuery = true)
-    public void setBookAsRead(@Param("isbn") String isbn, @Param("isRead") Integer isRead);
+    @Query(value = "select * from Library.books where books.id= :id", nativeQuery = true)
+    public Book findBookById(@Param("id") Integer id);
 
     @Transactional
-    public void deleteByIsbn(String isbn);
-
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE Library.books SET books.copies = :copies where isbn = :isbn", nativeQuery = true)
-    public void addCopies(@Param("isbn") String isbn, @Param("copies") Integer copies);
-
-    @Query(value = "select copies from Library.books where isbn= :isbn", nativeQuery = true)
-    public Integer getCopiesByIsbn(@Param ("isbn") String isbn);
+    public void deleteById(int id);
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE Library.books SET books.title = :title, books.genre = :genre, books.author_name = :authorName, books.category = :category, books.publisher = :publisher, books.copies = :copies WHERE isbn = :isbn", nativeQuery = true)
-    public void updateBookByIsbn(@Param("title") String title, @Param("genre") String genre, @Param("authorName") String authorName, @Param("category") String category, @Param("publisher") String pubisher, @Param("copies") Integer copies, @Param("isbn") String isbn);
+    @Query(value = "UPDATE Library.books SET books.is_read = :isRead where id = :id", nativeQuery = true)
+    public void setBookAsRead(@Param("id") Integer id, @Param("isRead") Integer isRead);
+
+    // @Transactional
+    // public void deleteByIsbn(String isbn);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE Library.books SET books.copies = :copies where id = :id", nativeQuery = true)
+    public void addCopies(@Param("id") Integer id, @Param("copies") Integer copies);
+
+    @Query(value = "select copies from Library.books where id= :id", nativeQuery = true)
+    public Integer getCopiesById(@Param ("id") Integer id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE Library.books SET books.title = :title, books.genre = :genre, books.author_name = :authorName, books.category = :category, books.publisher = :publisher, books.copies = :copies WHERE id = :id", nativeQuery = true)
+    public void updateBookById(@Param("title") String title, @Param("genre") String genre, @Param("authorName") String authorName, @Param("category") String category, @Param("publisher") String pubisher, @Param("copies") Integer copies, @Param("id") Integer id);
 }

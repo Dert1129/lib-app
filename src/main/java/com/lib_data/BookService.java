@@ -26,63 +26,55 @@ public class BookService {
         this.restTemplate = restTemplate;
     }
 
-    public String editBook(String isbn, String category, String title, String authorName, String publisher, String genre, Integer copies){
-        bookRepo.updateBookByIsbn(title, genre, authorName, category, publisher, copies, isbn);
+    public String editBook(Integer id, String category, String title, String authorName, String publisher, String genre, Integer copies){
+        bookRepo.updateBookById(title, genre, authorName, category, publisher, copies, id);
         return "Updated Book";
         
     }
 
-    public void deleteBook(String isbn) {
-        Book book = bookRepo.findByIsbn(isbn);
-        if (book != null){
-            bookRepo.deleteByIsbn(isbn);
+    public void deleteBook(Integer id) {
+        if (bookRepo.findBookById(id) != null){
+            bookRepo.deleteById(id);
         }
     }
 
-    public void markAsRead(String isbn, Integer read) {
-        bookRepo.setBookAsRead(isbn, read);
+    public void markAsRead(Integer id, Integer read) {
+        bookRepo.setBookAsRead(id, read);
     }
 
-    public Book findBook(String isbn) {
-        if(isbn != null){
-            return bookRepo.findByIsbn(isbn);
+    public Book findBookById(Integer id) {
+        if(id != null){
+            return bookRepo.findBookById(id);
         }else{
             return null;
         }
         
     }
 
+    public Book findBookByIsbn(String isbn){
+        if(isbn != null && !isbn.isEmpty()){
+            return bookRepo.findByIsbn(isbn);
+        }else {
+            return null;
+        }
+    }
+
     public String addManual(String isbn, String category, String title, String publisher, String author, String genre, Integer copies){
-        final String uri = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&key=" + apiKey;
         try {
-            String result = restTemplate.getForObject(uri, String.class);
-            JSONObject jsonObject = new JSONObject(result);
-            int totalItems = jsonObject.optInt("totalItems", 0);
-    
-            if (totalItems == 0) {
-                return "Book could not be found";
-            }else{
-                JSONArray itemsArr = jsonObject.getJSONArray("items");
-                JSONObject itemsObj = itemsArr.getJSONObject(0);
-                JSONObject volumeInfo = itemsObj.getJSONObject("volumeInfo");
-                JSONObject imageLinks = volumeInfo.getJSONObject("imageLinks");
-                String thumbnail = imageLinks.getString("thumbnail");
-                String description = volumeInfo.optString("description", "");
-                Book newBook = new Book();
-                newBook.setAuthorName(author);
-                newBook.setTitle(title);
-                newBook.setIsbn(isbn);
-                newBook.setImageLink(thumbnail);
-                newBook.setGenre(genre);
-                newBook.setRead(0);
-                newBook.setCopies(copies);
-                newBook.setDescription(description);
-                newBook.setCategory(category);
-                newBook.setPublisher(publisher);
-    
-                bookRepo.save(newBook);
-                return "Book added successfully";
-            }
+            Book newBook = new Book();
+            newBook.setAuthorName(author);
+            newBook.setTitle(title);
+            newBook.setIsbn(isbn);
+            newBook.setImageLink(null);
+            newBook.setGenre(genre);
+            newBook.setRead(0);
+            newBook.setCopies(copies);
+            newBook.setDescription(null);
+            newBook.setCategory(category);
+            newBook.setPublisher(publisher);
+
+            bookRepo.save(newBook);
+            return "Book added successfully";
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
             return "An error occurred while adding the book"; // Handle exception
@@ -90,18 +82,16 @@ public class BookService {
     }
 
 
-    public void addCopy(String isbn){
-        Book book = bookRepo.findByIsbn(isbn);
-        Integer copies = bookRepo.getCopiesByIsbn(isbn);
+    public void addCopy(Integer id){
+        Integer copies = bookRepo.getCopiesById(id);
         Integer newCopies = copies + 1;
-        if(book != null){
-            bookRepo.addCopies(isbn, newCopies);
+        if(bookRepo.findBookById(id) != null){
+            bookRepo.addCopies(id, newCopies);
         }
     }
 
     public String addBook(String isbn) {
         final String uri = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&key=" + apiKey;
-        RestTemplate restTemplate = new RestTemplate();
         try {
             String result = restTemplate.getForObject(uri, String.class);
             JSONObject jsonObject = new JSONObject(result);
