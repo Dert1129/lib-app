@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -26,8 +27,8 @@ public class BookService {
         this.restTemplate = restTemplate;
     }
 
-    public String editBook(Integer id, String category, String title, String authorName, String publisher, String genre, Integer copies){
-        bookRepo.updateBookById(title, genre, authorName, category, publisher, copies, id);
+    public String editBook(Integer id, String category, String title, String authorName, String publisher, String genre, Integer copies, Date startDate, Date endDate){
+        bookRepo.updateBookById(title, genre, authorName, category, publisher, copies, startDate, endDate, id);
         return "Updated Book";
         
     }
@@ -72,6 +73,8 @@ public class BookService {
             newBook.setDescription(null);
             newBook.setCategory(category);
             newBook.setPublisher(publisher);
+            newBook.setStartDate(null);
+            newBook.setEndDate(null);
 
             bookRepo.save(newBook);
             return "Book added successfully";
@@ -127,6 +130,8 @@ public class BookService {
                 newBook.setDescription(description);
                 newBook.setCategory(category);
                 newBook.setPublisher(publisher);
+                newBook.setStartDate(null);
+                newBook.setEndDate(null);
     
                 bookRepo.save(newBook);
                 return "Book added successfully";

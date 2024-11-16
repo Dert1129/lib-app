@@ -1,5 +1,7 @@
 package com.lib_data;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +27,8 @@ public class Book {
     private String description;
     private String category;
     private String publisher;
+    private Date startDate;
+    private Date endDate;
 
 
     public int getId() {
@@ -114,4 +118,22 @@ public class Book {
     public void setPublisher(String publisher){
         this.publisher = publisher;
     }
+
+
+    public Date getStartDate() {
+        return this.startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return this.endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
 }

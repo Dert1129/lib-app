@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.sql.Date;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,9 +33,13 @@ public class BookController {
         String publisher = payload.get("publisher").toString();
         String genre = payload.get("genre").toString();
         String authorName = payload.get("authorName").toString();
+        String startDateString = payload.get("startDate").toString();
+        String endDateString = payload.get("endDate").toString();
+        Date startDate = Date.valueOf(startDateString);
+        Date endDate = Date.valueOf(endDateString);
         Integer copies = (Integer) payload.get("copies");
         if (bookRepo.findBookById(id) != null){
-            bookService.editBook(id, category, title, authorName, publisher, genre, copies);
+            bookService.editBook(id, category, title, authorName, publisher, genre, copies, startDate, endDate);
             return "Updated book";
         }else{
             return "Book could not be updated";
@@ -54,7 +60,6 @@ public class BookController {
 
     @RequestMapping(value = "/api/addManual", method =  RequestMethod.POST)
     public @ResponseBody String addManual(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
-        // if isbn is null (aka, google books can't find the book how do i check if the book exists?)  Figure out this problem later
         String title = payload.get("title").toString();
         String category =  payload.get("category").toString();
         String isbn = payload.get("isbn").toString();
