@@ -27,8 +27,8 @@ public class BookService {
         this.restTemplate = restTemplate;
     }
 
-    public String editBook(Integer id, String category, String title, String authorName, String publisher, String genre, Integer copies, Date startDate, Date endDate){
-        bookRepo.updateBookById(title, genre, authorName, category, publisher, copies, startDate, endDate, id);
+    public String editBook(Integer id, String category, String title, String authorName, String publisher, List<String> genreList, Integer copies, Date startDate, Date endDate){
+        bookRepo.updateBookById(title, genreList, authorName, category, publisher, copies, startDate, endDate, id);
         return "Updated Book";
         
     }
@@ -60,14 +60,14 @@ public class BookService {
         }
     }
 
-    public String addManual(String isbn, String category, String title, String publisher, String author, String genre, Integer copies){
+    public String addManual(String isbn, String category, String title, String publisher, String author, List<String> genre, Integer copies){
         try {
             Book newBook = new Book();
             newBook.setAuthorName(author);
             newBook.setTitle(title);
             newBook.setIsbn(isbn);
             newBook.setImageLink(null);
-            newBook.setGenre(genre);
+            newBook.setGenreList(genre);
             newBook.setRead(0);
             newBook.setCopies(copies);
             newBook.setDescription(null);
@@ -124,7 +124,7 @@ public class BookService {
                 newBook.setTitle(title);
                 newBook.setIsbn(isbn);
                 newBook.setImageLink(thumbnail);
-                newBook.setGenre(null);
+                newBook.setGenreList(null);
                 newBook.setRead(0);
                 newBook.setCopies(1);
                 newBook.setDescription(description);

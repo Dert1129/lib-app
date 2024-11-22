@@ -4,6 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 public class BookTest {
     private Book book;
     @BeforeEach
@@ -41,9 +45,11 @@ public class BookTest {
     }
 
     @Test
-    public void testSetGenre() {
-        book.setGenre("horror");
-        assertEquals("horror", book.getGenre());
+    public void testSetGenreList() {
+        List<String> expected = new ArrayList<>();
+        expected.add("horror");
+        book.setGenreList(expected);
+        assertEquals(expected, book.getGenreList());
     }
 
     @Test

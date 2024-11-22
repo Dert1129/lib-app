@@ -1,6 +1,8 @@
 package com.lib_data;
 
 import java.util.Map;
+
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +34,11 @@ public class BookController {
         String category =  payload.get("category").toString();
         Integer id = (Integer) payload.get("id");
         String publisher = payload.get("publisher").toString();
-        String genre = payload.get("genre").toString();
+        JSONArray genreArray = (JSONArray) payload.get("genre");
+        List<String> genreList = new ArrayList<String>();
+        for (int i = 0; i < genreArray.length(); i++) {
+            genreList.add(genreArray.getString(i));
+        }
         String authorName = payload.get("authorName").toString();
         String startDateString = payload.get("startDate").toString();
         String endDateString = payload.get("endDate").toString();
@@ -39,7 +46,7 @@ public class BookController {
         Date endDate = Date.valueOf(endDateString);
         Integer copies = (Integer) payload.get("copies");
         if (bookRepo.findBookById(id) != null){
-            bookService.editBook(id, category, title, authorName, publisher, genre, copies, startDate, endDate);
+            bookService.editBook(id, category, title, authorName, publisher, genreList, copies, startDate, endDate);
             return "Updated book";
         }else{
             return "Book could not be updated";
@@ -64,14 +71,18 @@ public class BookController {
         String category =  payload.get("category").toString();
         String isbn = payload.get("isbn").toString();
         String publisher = payload.get("publisher").toString();
-        String genre = payload.get("genre").toString();
+        JSONArray genreArray = (JSONArray) payload.get("genre");
+        List<String> genreList = new ArrayList<String>();
+        for (int i = 0; i < genreArray.length(); i++) {
+            genreList.add(genreArray.getString(i));
+        }
         String author = payload.get("authorName").toString();
         Integer copies = (Integer) payload.get("copies");
         if (bookRepo.findByIsbn(isbn) == null){
-            bookService.addManual(isbn, category, title, publisher, author, genre, copies);
+            bookService.addManual(isbn, category, title, publisher, author, genreList, copies);
             return "Added book manually";
         }else{
-            return "Book exists in catelog";
+            return "Book exists in catalog";
         }
 
     }

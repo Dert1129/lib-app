@@ -1,6 +1,7 @@
 package com.lib_data;
 
 import java.sql.Date;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +20,7 @@ public class Book {
     private String title;
     private String authorName;
     private String isbn;
-    private String genre;
+    private List<String> genreList;
     private String imageLink;
     @Column(name = "is_read")
     private int read;
@@ -63,12 +64,12 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public String getGenre(){
-        return this.genre;
+    public List<String> getGenreList(){
+        return this.genreList;
     }
 
-    public void setGenre(String genre){
-        this.genre = genre;
+    public void setGenreList(List<String> genreList){
+        this.genreList = genreList;
     }
 
     public String getImageLink () {

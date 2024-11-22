@@ -44,6 +44,6 @@ public interface BookRepository extends CrudRepository<Book, Integer>{
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE Library.books SET books.title = :title, books.genre = :genre, books.author_name = :authorName, books.category = :category, books.publisher = :publisher, books.copies = :copies, books.start_date = :startDate, books.end_date = :endDate WHERE id = :id", nativeQuery = true)
-    public void updateBookById(@Param("title") String title, @Param("genre") String genre, @Param("authorName") String authorName, @Param("category") String category, @Param("publisher") String pubisher, @Param("copies") Integer copies, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("id") Integer id);
+    @Query(value = "UPDATE Library.books SET books.title = :title, books.genre = :genreList, books.author_name = :authorName, books.category = :category, books.publisher = :publisher, books.copies = :copies, books.start_date = :startDate, books.end_date = :endDate WHERE id = :id", nativeQuery = true)
+    public void updateBookById(@Param("title") String title, @Param("genreList") List<String> genreList, @Param("authorName") String authorName, @Param("category") String category, @Param("publisher") String pubisher, @Param("copies") Integer copies, @Param("startDate") Date startDate, @Param("endDate") Date endDate, @Param("id") Integer id);
 }
