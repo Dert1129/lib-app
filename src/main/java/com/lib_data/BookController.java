@@ -34,11 +34,8 @@ public class BookController {
         String category =  payload.get("category").toString();
         Integer id = (Integer) payload.get("id");
         String publisher = payload.get("publisher").toString();
-        JSONArray genreArray = (JSONArray) payload.get("genre");
-        List<String> genreList = new ArrayList<String>();
-        for (int i = 0; i < genreArray.length(); i++) {
-            genreList.add(genreArray.getString(i));
-        }
+        @SuppressWarnings("unchecked")
+        List<String> genreList = (List<String>) payload.get("genre");
         String authorName = payload.get("authorName").toString();
         String startDateString = payload.get("startDate").toString();
         String endDateString = payload.get("endDate").toString();
@@ -67,19 +64,19 @@ public class BookController {
 
     @RequestMapping(value = "/api/addManual", method =  RequestMethod.POST)
     public @ResponseBody String addManual(@RequestBody Map<String, Object> payload, HttpServletRequest request) throws Exception {
+        System.out.println(payload);
         String title = payload.get("title").toString();
         String category =  payload.get("category").toString();
         String isbn = payload.get("isbn").toString();
         String publisher = payload.get("publisher").toString();
-        JSONArray genreArray = (JSONArray) payload.get("genre");
-        List<String> genreList = new ArrayList<String>();
-        for (int i = 0; i < genreArray.length(); i++) {
-            genreList.add(genreArray.getString(i));
-        }
+        String imageLink = payload.get("imageLink").toString();
+        String description = payload.get("description").toString();
+        @SuppressWarnings("unchecked")
+        List<String> genreList = (List<String>) payload.get("genre");
         String author = payload.get("authorName").toString();
         Integer copies = (Integer) payload.get("copies");
         if (bookRepo.findByIsbn(isbn) == null){
-            bookService.addManual(isbn, category, title, publisher, author, genreList, copies);
+            bookService.addManual(isbn, category, title, publisher, author, genreList, copies, imageLink, description);
             return "Added book manually";
         }else{
             return "Book exists in catalog";

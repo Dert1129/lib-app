@@ -1,7 +1,12 @@
 package com.lib_data;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "books")
@@ -21,6 +27,8 @@ public class Book {
     private String authorName;
     private String isbn;
     @Column(name = "genre")
+    private String genre;
+    @Transient
     private List<String> genreList;
     private String imageLink;
     @Column(name = "is_read")
@@ -31,6 +39,7 @@ public class Book {
     private String publisher;
     private Date startDate;
     private Date endDate;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
 
     public int getId() {
@@ -64,13 +73,37 @@ public class Book {
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
-
-    public List<String> getGenreList(){
-        return this.genreList;
+    
+    @SuppressWarnings("unchecked")
+    public List<String> getGenreList() {
+        if (genre != null && !genre.isEmpty()) {
+            try {
+                return objectMapper.readValue(genre, List.class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
-    public void setGenreList(List<String> genreList){
-        this.genreList = genreList;
+    public void setGenreList(List<String> genreList) {
+        if (genreList != null) {
+            try {
+                this.genre = objectMapper.writeValueAsString(genreList);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        } else {
+            this.genre = null;
+        }
+    }
+    
+       public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public String getImageLink () {

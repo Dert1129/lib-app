@@ -60,19 +60,20 @@ public class BookService {
         }
     }
 
-    public String addManual(String isbn, String category, String title, String publisher, String author, List<String> genre, Integer copies){
+    public String addManual(String isbn, String category, String title, String publisher, String author, List<String> genre, Integer copies, String imageLink, String description){
         try {
             Book newBook = new Book();
             newBook.setAuthorName(author);
             newBook.setTitle(title);
             newBook.setIsbn(isbn);
-            newBook.setImageLink(null);
+            newBook.setImageLink(imageLink);
             newBook.setGenreList(genre);
             newBook.setRead(0);
             newBook.setCopies(copies);
             newBook.setDescription(null);
             newBook.setCategory(category);
             newBook.setPublisher(publisher);
+            newBook.setDescription(description);
             newBook.setStartDate(null);
             newBook.setEndDate(null);
 
