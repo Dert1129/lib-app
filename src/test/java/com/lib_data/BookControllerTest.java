@@ -115,7 +115,7 @@ class BookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("Book exists in catelog"));
 
-        verify(bookService, times(0)).addManual(anyString(), anyString(), anyString(), anyString(), anyString(), anyList(), anyInt());
+        verify(bookService, times(0)).addManual(anyString(), anyString(), anyString(), anyString(), anyString(), anyList(), anyInt(), anyString(), anyString());
     }
 
     @Test
