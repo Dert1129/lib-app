@@ -93,7 +93,7 @@ public class BookService {
         }
     }
 
-    public String addBook(String isbn) {
+    public Book getBook(String isbn) {
         final String uri = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&key=" + apiKey;
         try {
             String result = restTemplate.getForObject(uri, String.class);
@@ -103,7 +103,7 @@ public class BookService {
             int totalItems = jsonObject.optInt("totalItems", 0);
     
             if (totalItems == 0) {
-                return "Book could not be found";
+                return null;
             } else {
                 // Only proceed if totalItems is greater than 0
                 JSONArray itemsArr = jsonObject.getJSONArray("items");
@@ -132,13 +132,12 @@ public class BookService {
                 newBook.setPublisher(publisher);
                 newBook.setStartDate(null);
                 newBook.setEndDate(null);
-    
-                bookRepo.save(newBook);
-                return "Book added successfully";
+
+                return newBook;
             }
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
-            return "An error occurred while adding the book"; // Handle exception
+            return null;
         }
     }
     

@@ -105,20 +105,20 @@ public class BookController {
         }
     }
 
-    @RequestMapping(value = "/api/addBook", method = RequestMethod.POST)
-    public @ResponseBody String addIsbn(@RequestParam(value = "isbn") String isbn, HttpServletRequest request) throws Exception {
+    @RequestMapping(value = "/api/getBook", method = RequestMethod.POST)
+    public @ResponseBody Book addIsbn(@RequestParam(value = "isbn") String isbn, HttpServletRequest request) throws Exception {
         if (!(isbn.isEmpty() || isbn.equals(null))){
 
             if (bookRepo.findByIsbn(isbn) == null){
-                String response = bookService.addBook(isbn);
+                Book response = bookService.getBook(isbn);
                 System.out.println(response);
-                if (response == "Book added successfully"){
-                    return "Added book";
+                if (response != null){
+                    return response;
                 }else{
-                    return "There was a problem adding the book";
+                    return null;
                 }
             }else{
-                return "This book already exists";
+                return null;
             }
 
         }else{

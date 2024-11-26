@@ -48,7 +48,7 @@ public class BookServiceTest {
 	}
 
     @Test
-    public void testAddBook_whenTotalItemsIsZero_thenReturnBookNotFound() {
+    public void testgetBook_whenTotalItemsIsZero_thenReturnBookNotFound() {
         String isbn = "1234567890";
 
         // Mock RestTemplate response to simulate API returning totalItems as 0
@@ -61,10 +61,10 @@ public class BookServiceTest {
         when(restTemplate.getForObject(anyString(), eq(String.class))).thenReturn(jsonResponse);
 
         // Execute the method under test
-        String result = bookService.addBook(isbn);
+        Book result = bookService.getBook(isbn);
 
         // Verify the result
-        assertEquals("Book could not be found", result);
+        assertEquals(null, result);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class BookServiceTest {
     }
 
     @Test
-    void testAddBook_BookDoesNotExistAndIsFetched() {
+    void testgetBook_BookDoesNotExistAndIsFetched() {
         String isbn = "1234567890";
         
         when(bookService.findBookByIsbn(isbn)).thenReturn(null);
@@ -121,7 +121,7 @@ public class BookServiceTest {
         when(restTemplate.getForObject(anyString(), eq(String.class)))
             .thenReturn(jsonObject.toString());
 
-        bookService.addBook(isbn);
+        bookService.getBook(isbn);
 
         ArgumentCaptor<Book> bookCaptor = ArgumentCaptor.forClass(Book.class);
         verify(bookRepo, times(1)).save(bookCaptor.capture());
@@ -134,19 +134,19 @@ public class BookServiceTest {
     }
 
     @Test
-    void testAddBook_BookAlreadyExists() {
+    void testgetBook_BookAlreadyExists() {
         String isbn = "1234567890";
         Book existingBook = new Book();
         when(bookService.findBookByIsbn(isbn)).thenReturn(existingBook);
 
-        bookService.addBook(isbn);
+        bookService.getBook(isbn);
 
         verify(bookRepo, never()).save(any(Book.class));
         verify(restTemplate, never()).getForObject(anyString(), eq(String.class));
     }
 
     @Test
-    void testAddBook_BookNotFoundInApi() {
+    void testgetBook_BookNotFoundInApi() {
         String isbn = "1234567890";
         when(bookService.findBookByIsbn(isbn)).thenReturn(null);
         
@@ -155,20 +155,20 @@ public class BookServiceTest {
 
         when(restTemplate.getForObject(anyString(), eq(String.class))).thenReturn(jsonObject.toString());
 
-        bookService.addBook(isbn);
+        bookService.getBook(isbn);
 
         verify(bookRepo, never()).save(any(Book.class));
     }
 
     @Test
-    void testAddBook_InvalidApiKey() {
+    void testgetBook_InvalidApiKey() {
     String isbn = "1234567890";
     when(bookService.findBookByIsbn(isbn)).thenReturn(null);
 
     when(restTemplate.getForObject(anyString(), eq(String.class)))
         .thenThrow(new RuntimeException("API key not valid. Please pass a valid API key."));
 
-    assertDoesNotThrow(() -> bookService.addBook(isbn));
+    assertDoesNotThrow(() -> bookService.getBook(isbn));
     verify(bookRepo, never()).save(any(Book.class));
 }
 }

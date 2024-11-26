@@ -20,6 +20,7 @@ public class Book {
     private String title;
     private String authorName;
     private String isbn;
+    @Column(name = "genre")
     private List<String> genreList;
     private String imageLink;
     @Column(name = "is_read")
