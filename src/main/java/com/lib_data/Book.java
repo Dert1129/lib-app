@@ -39,6 +39,8 @@ public class Book {
     private String publisher;
     private Date startDate;
     private Date endDate;
+    private String review;
+    private int rating;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
 
@@ -171,4 +173,19 @@ public class Book {
         this.endDate = endDate;
     }
 
+    public String getReview() {
+        return this.review;
+    }
+
+    public String setReview(String review) {
+        return this.review = review;
+    }   
+
+    public int getRating() {
+        return this.rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
 }
