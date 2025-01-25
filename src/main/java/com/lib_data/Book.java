@@ -22,7 +22,7 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String title;
     private String authorName;
     private String isbn;
@@ -32,23 +32,23 @@ public class Book {
     private List<String> genreList;
     private String imageLink;
     @Column(name = "is_read")
-    private int read;
-    private int copies;
+    private Integer read;
+    private Integer copies;
     private String description;
     private String category;
     private String publisher;
     private Date startDate;
     private Date endDate;
     private String review;
-    private int rating;
+    private Integer rating;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -116,15 +116,15 @@ public class Book {
         this.imageLink = imageLink;
     }
 
-    public int getRead() {
+    public Integer getRead() {
         return read;
     }
 
-    public void setRead(int read){
+    public void setRead(Integer read){
         this.read = read;
     }
 
-    public int getCopies() {
+    public Integer getCopies() {
         return copies;
     }
 
@@ -181,11 +181,11 @@ public class Book {
         return this.review = review;
     }   
 
-    public int getRating() {
+    public Integer getRating() {
         return this.rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         this.rating = rating;
     }
 }
