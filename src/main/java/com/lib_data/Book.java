@@ -40,7 +40,7 @@ public class Book {
     private Date startDate;
     private Date endDate;
     private String review;
-    private Integer rating;
+    private Float rating;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
 
@@ -181,11 +181,11 @@ public class Book {
         return this.review = review;
     }   
 
-    public Integer getRating() {
+    public Float getRating() {
         return this.rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 }
